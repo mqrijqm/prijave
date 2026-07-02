@@ -1,0 +1,141 @@
+/* ============================================================
+   Dev Mobile Emulator — plutajući toggle za mobile-first rad
+   Ne utiče na sam sadržaj stranice; sve je scoped na .devmob-*
+   ============================================================ */
+
+.devmob-fab {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 2147483000;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 999px;
+  background: #14253b;
+  color: #fff;
+  font-family: "Public Sans", system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  box-shadow: 0 6px 22px -8px rgba(18, 36, 58, 0.65);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.2s ease, box-shadow 0.25s ease;
+}
+.devmob-fab:hover { transform: translateY(-2px); box-shadow: 0 12px 30px -10px rgba(18, 36, 58, 0.7); }
+.devmob-fab svg { width: 16px; height: 16px; }
+.devmob-fab.is-active { background: #0f8a5f; }
+
+/* Overlay */
+.devmob-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2147482000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 18px 16px 24px;
+  background: rgba(15, 23, 38, 0.78);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s ease;
+  overflow: auto;
+}
+.devmob-overlay.is-open { opacity: 1; pointer-events: auto; }
+
+/* Toolbar */
+.devmob-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 18px;
+  padding: 8px 10px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-family: "Public Sans", system-ui, sans-serif;
+}
+.devmob-toolbar button,
+.devmob-toolbar select {
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: #e8eef6;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 9px;
+  padding: 7px 12px;
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+.devmob-toolbar button:hover,
+.devmob-toolbar select:hover { background: rgba(255, 255, 255, 0.16); }
+.devmob-toolbar select { padding-right: 8px; }
+.devmob-toolbar select option { color: #14253b; }
+.devmob-dims {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.65);
+  letter-spacing: 0.04em;
+  min-width: 92px;
+  text-align: center;
+}
+.devmob-close { background: rgba(239, 68, 68, 0.18) !important; border-color: rgba(239, 68, 68, 0.4) !important; }
+.devmob-close:hover { background: rgba(239, 68, 68, 0.32) !important; }
+
+/* Device frame (visually scaled to fit; iframe keeps real px) */
+.devmob-stage {
+  transform-origin: top center;
+  transition: transform 0.2s ease;
+}
+.devmob-device {
+  position: relative;
+  background: #0b1220;
+  border-radius: 44px;
+  padding: 12px;
+  box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.7),
+              0 0 0 2px rgba(255, 255, 255, 0.06) inset;
+}
+.devmob-device::before { /* notch */
+  content: "";
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 26px;
+  background: #0b1220;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  z-index: 3;
+}
+.devmob-device.is-landscape::before {
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  width: 26px;
+  height: 120px;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+.devmob-screen {
+  position: relative;
+  overflow: hidden;
+  border-radius: 34px;
+  background: #fff;
+  display: block;
+}
+.devmob-screen iframe {
+  border: 0;
+  display: block;
+  background: #fff;
+}

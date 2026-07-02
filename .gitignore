@@ -1,0 +1,6 @@
+# Tool artifacts
+.playwright-mcp/
+
+# OS
+Thumbs.db
+.DS_Store

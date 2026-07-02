@@ -1,0 +1,769 @@
+/* ============================================================
+   PRIJAVA — mobile-first redesign
+   Ručno pisan, čist, lako za editovanje. Desktop kasnije.
+   ============================================================ */
+
+:root {
+  --nav: #16263c;          /* navy naslovi */
+  --nav-soft: #21344c;
+  --ink: #5c6b7c;          /* sivi opis/tekst */
+  --ink-2: #7c8896;        /* svjetliji sivi */
+  --paper: #f6f8fb;        /* pozadina */
+  --card: #ffffff;
+  --line: rgba(20, 37, 59, 0.10);
+  --line-2: rgba(20, 37, 59, 0.06);
+  --pill: #eceff4;
+  --green: #12a074;        /* avatar / accent */
+  --blue: #4f63d6;         /* kategorija dot */
+  --radius: 18px;
+
+  /* SAMO DVIJE VELIČINE FONTA */
+  --fs-text: 0.95rem;      /* sav tekst — opis, labele, vrijednosti, koraci */
+  --fs-title: 1.34rem;     /* malo veće — SAMO naslov */
+
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+  --sans: "Public Sans", system-ui, -apple-system, sans-serif;
+  --brand: "Comfortaa", var(--sans);
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--nav);
+  font-family: var(--sans);
+  font-size: var(--fs-text);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ---------- HEADER ---------- */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 20px;
+  background: rgba(246, 248, 251, 0.86);
+  backdrop-filter: saturate(140%) blur(10px);
+  -webkit-backdrop-filter: saturate(140%) blur(10px);
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  color: var(--nav);
+  cursor: pointer;
+  border-radius: 12px;
+  transition: background 0.18s ease;
+}
+.icon-btn:hover { background: rgba(20, 37, 59, 0.06); }
+.icon-btn svg { width: 24px; height: 24px; }
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--nav);
+}
+.brand svg { width: 34px; height: 34px; }
+.brand span {
+  font-family: var(--brand);
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: 0.01em;
+  color: var(--nav);
+}
+
+.header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--green);
+  color: #fff;
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: 0.02em;
+}
+
+/* ---------- CONTAINER ---------- */
+.container {
+  padding: 0 20px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* Sve ISPOD slike — malo uvučeno od ivica (veći razmak, ali ne prevelik).
+   Slika, naslov, opis i kategorija ostaju na 20px; donji dio je uvučen +10px. */
+.meta-row,
+.stats,
+.sec-head,
+.tok,
+.card,
+.ask,
+.action,
+.subactions,
+.comment-compose,
+.comment-list {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+/* ---------- CATEGORY PILL ---------- */
+.cat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 40px 0 32px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--pill);
+  font-family: var(--mono);
+  font-size: var(--fs-text);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--nav-soft);
+  text-transform: uppercase;
+}
+.cat-pill .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--blue);
+  flex: none;
+}
+
+/* ---------- TITLE + LEAD ---------- */
+.detail-title {
+  margin: 0 0 26px;
+  font-size: var(--fs-title);  /* jedina veća veličina — naslov */
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--nav);
+  text-wrap: balance;
+}
+.detail-lead {
+  margin: 0 0 44px;
+  font-size: var(--fs-text);  /* max 3 reda */
+  line-height: 1.55;
+  font-weight: 400;
+  color: var(--ink);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ---------- HERO IMAGE ---------- */
+.hero {
+  position: relative;
+  margin: 0 0 26px;
+}
+.hero img {
+  width: 100%;
+  aspect-ratio: 16 / 9;       /* niža slika */
+  object-fit: cover;
+  border-radius: var(--radius);
+  display: block;
+  background: #dfe4ea;
+}
+/* "Pocket" u boji pozadine — slika se obmota oko dugmeta
+   (prati lijevu i donju ivicu, sa zaobljenim concave uglom) */
+.zoom-pocket {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: var(--paper);
+  padding: 0 0 7px 7px;                  /* razmak: dolje + lijevo */
+  border-top-right-radius: var(--radius);
+  border-bottom-left-radius: 22px;       /* concave zaobljenje */
+}
+.hero-zoom {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  border-top-right-radius: 14px;
+  background: #fff;
+  border: 1px solid var(--line);
+  box-shadow: 0 3px 10px -4px rgba(20, 37, 59, 0.32);
+  color: var(--nav);
+  cursor: pointer;
+  transition: background 0.18s ease, transform 0.18s ease;
+}
+.hero-zoom:hover { background: #f4f7fb; transform: translateY(-1px); }
+.hero-zoom svg { width: 18px; height: 18px; }
+
+/* ---------- META ROW ---------- */
+.meta-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 22px 0 44px;
+  border-top: 1px solid var(--line);
+}
+.meta { display: flex; flex-direction: column; gap: 7px; }
+.meta:nth-child(1) { align-items: flex-start; text-align: left; }
+.meta:nth-child(2) { align-items: center; text-align: center; }
+.meta:nth-child(3) { align-items: flex-end; text-align: right; }
+.meta-label {
+  font-family: var(--mono);
+  font-size: var(--fs-text);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--nav);
+  text-transform: uppercase;
+}
+.meta-value {
+  font-size: var(--fs-text);
+  font-weight: 500;
+  color: var(--ink-2);
+}
+
+/* ---------- STATS ---------- */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 10px 0 0;   /* kartice = zadnje na prvom ekranu; veliki razmak dolazi ispod (sec-head) */
+}
+.stat {
+  background: var(--card);
+  border: 1px solid var(--line-2);
+  border-radius: 14px;
+  padding: 16px 12px;
+  text-align: center;
+}
+.stat b {
+  display: block;
+  font-size: var(--fs-text);
+  font-weight: 800;
+  color: var(--nav);
+  line-height: 1;
+}
+.stat span {
+  display: block;
+  margin-top: 8px;
+  font-family: var(--mono);
+  font-size: var(--fs-text);
+  letter-spacing: 0.1em;
+  color: var(--ink-2);
+  text-transform: uppercase;
+}
+
+/* ---------- SECTION LABEL ---------- */
+.sec-label {
+  font-family: var(--mono);
+  font-size: var(--fs-text);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--ink-2);
+  text-transform: uppercase;
+  margin: 34px 0 16px;
+}
+
+/* Section header sa linijom desno */
+.sec-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 30px 0 26px;   /* tijesan razmak — "Tok prijave" odmah ispod kartica */
+}
+.sec-head .lbl {
+  font-family: var(--mono);
+  font-size: var(--fs-text);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--nav);
+  white-space: nowrap;
+}
+.sec-head .rule { flex: 1; height: 1px; background: var(--line); }
+
+/* ---------- TOK PRIJAVE (checkbox + rail) ---------- */
+.tok { position: relative; }
+.tok::before {                 /* dashed vertical rail */
+  content: "";
+  position: absolute;
+  left: 20px;
+  top: 16px;
+  bottom: 18px;
+  border-left: 2px dashed rgba(20, 37, 59, 0.20);
+}
+
+.rail-pill {
+  position: absolute;
+  left: 20px;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: var(--fs-text);
+  font-weight: 500;
+  color: var(--nav);
+  box-shadow: 0 1px 2px rgba(20, 37, 59, 0.05);
+  white-space: nowrap;
+  z-index: 2;
+}
+
+.tok-top {
+  position: relative;
+  min-height: 34px;
+  padding-left: 92px;
+  margin-bottom: 6px;
+}
+.tok-top .rail-pill { top: 0; }
+.tok-summary {
+  margin: 0;
+  font-size: var(--fs-text);
+  line-height: 1.5;
+  color: var(--nav);
+  font-weight: 400;
+}
+
+.tok-time { position: relative; height: 46px; }
+.tok-time .rail-pill { top: 8px; }
+
+.steps2 { list-style: none; margin: 8px 0 0; padding: 0; }
+.steps2 li {
+  position: relative;
+  min-height: 68px;
+  padding: 18px 0 18px 92px;
+}
+.steps2 .dot {                 /* mali hollow krug na rail-u */
+  position: absolute;
+  left: 20px;
+  top: 18px;
+  transform: translateX(-50%);
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(20, 37, 59, 0.30);
+  background: var(--paper);
+  z-index: 2;
+}
+.steps2 .box {                 /* checkbox kvadrat */
+  position: absolute;
+  left: 50px;
+  top: 8px;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  border: 1.5px solid var(--line);
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.steps2 li.done .box { background: var(--nav); border-color: var(--nav); }
+.steps2 .box svg { width: 16px; height: 16px; color: #fff; }
+
+.steps2 .row1 { display: flex; align-items: center; gap: 10px; min-height: 30px; }
+.steps2 .nm { font-size: var(--fs-text); font-weight: 500; color: var(--nav); }
+.steps2 li:not(.done) .nm { color: #3c4b5f; }
+.steps2 .frac { font-size: var(--fs-text); color: var(--ink-2); }
+.steps2 .dur {
+  display: inline-block;
+  margin-top: 7px;
+  background: #101828;
+  color: #fff;
+  border-radius: 8px;
+  padding: 4px 11px;
+  font-size: var(--fs-text);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* ---------- CARD (Kontekst / Sažetak) ---------- */
+.card {
+  background: var(--card);
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius);
+  padding: 22px 20px;
+  margin-bottom: 22px;
+}
+.card .summary-tag {
+  font-family: var(--mono);
+  font-size: var(--fs-text);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--green);
+  font-weight: 600;
+}
+.card p {
+  margin: 12px 0 0;
+  font-size: var(--fs-text);
+  line-height: 1.62;
+  color: var(--ink);
+}
+
+/* ---------- PRIMARY ACTION ---------- */
+.action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: auto;           /* puni širinu minus margine (ne iskače van) */
+  margin-top: 88px;      /* više zraka prije glavnog dugmeta */
+  padding: 18px;
+  border: none;
+  border-radius: 14px;
+  background: var(--nav);
+  color: #fff;
+  font-family: var(--sans);
+  font-size: var(--fs-text);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease;
+}
+.action:hover { transform: translateY(-2px); background: #1d3350; }
+.action svg { width: 18px; height: 18px; }
+
+.subactions {
+  display: flex;
+  justify-content: center;
+  gap: 26px;
+  margin: 40px 0 88px;
+}
+.subactions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: var(--fs-text);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+.subactions svg { width: 16px; height: 16px; }
+
+/* ---------- STATUS DETALJ (Zaprimljeno) ---------- */
+.status-card { margin-top: 44px; }
+.status-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(18, 160, 116, 0.12);
+  color: #0d7d5a;
+  font-family: var(--mono);
+  font-size: var(--fs-text);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.status-pill::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+}
+.status-time {
+  font-size: var(--fs-text);
+  font-weight: 500;
+  color: var(--ink-2);
+}
+.status-headline {
+  margin: 0;
+  font-size: var(--fs-text);   /* ista veličina — samo deblje */
+  font-weight: 800;
+  color: var(--nav);
+}
+.status-next {
+  margin-top: 22px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line-2);
+}
+.next-label {
+  display: block;
+  font-family: var(--mono);
+  font-size: var(--fs-text);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--green);
+}
+
+/* ---------- PITAJTE O OVOJ PRIJAVI ---------- */
+.ask { margin-top: 48px; }
+.ask-title {
+  margin: 0 0 22px;
+  font-size: var(--fs-title);   /* veličina prvog naslova */
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--nav);
+}
+.ask-suggest {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 26px;
+}
+.q-chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  padding: 15px 18px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--card);
+  color: var(--nav);
+  font-family: var(--sans);
+  font-size: var(--fs-text);
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+}
+.q-chip:hover {
+  background: #f4f7fb;
+  border-color: rgba(20, 37, 59, 0.22);
+  transform: translateY(-1px);
+}
+.q-chip svg { width: 16px; height: 16px; color: var(--ink-2); flex: none; }
+
+.ask-label {
+  display: block;
+  margin-bottom: 10px;
+  font-family: var(--mono);
+  font-size: var(--fs-text);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--nav);
+}
+.ask-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 6px 6px 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--card);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.ask-field:focus-within {
+  border-color: var(--nav-soft);
+  box-shadow: 0 0 0 3px rgba(20, 37, 59, 0.07);
+}
+.ask-field input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--sans);
+  font-size: var(--fs-text);
+  color: var(--nav);
+  padding: 12px 0;
+}
+.ask-field input::placeholder { color: var(--ink-2); }
+.ask-send {
+  flex: none;
+  border: none;
+  border-radius: 10px;
+  background: var(--nav);
+  color: #fff;
+  font-family: var(--sans);
+  font-size: var(--fs-text);
+  font-weight: 700;
+  padding: 12px 18px;
+  cursor: pointer;
+  transition: background 0.18s ease;
+}
+.ask-send:hover { background: #1d3350; }
+
+/* ---------- SEKUNDARNO DUGME (Potvrdi problem) ---------- */
+.action.secondary {
+  margin-top: 12px;
+  background: var(--card);
+  color: var(--nav);
+  border: 1px solid var(--line);
+}
+.action.secondary:hover { background: #f4f7fb; }
+
+/* ---------- KOMENTARI ---------- */
+.comment-compose {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.c-avatar {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: var(--fs-text);
+  background: var(--green);
+}
+.c-avatar.a1 { background: #4f63d6; }
+.c-avatar.a2 { background: #d98b5f; }
+
+.comment-field {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 6px 6px 6px 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--card);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.comment-field:focus-within {
+  border-color: var(--nav-soft);
+  box-shadow: 0 0 0 3px rgba(20, 37, 59, 0.07);
+}
+.comment-field textarea {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  resize: none;
+  font-family: var(--sans);
+  font-size: var(--fs-text);
+  line-height: 1.5;
+  color: var(--nav);
+  padding: 10px 0;
+  max-height: 140px;
+}
+.comment-field textarea::placeholder { color: var(--ink-2); }
+.comment-send {
+  flex: none;
+  border: none;
+  border-radius: 10px;
+  background: var(--nav);
+  color: #fff;
+  font-family: var(--sans);
+  font-size: var(--fs-text);
+  font-weight: 700;
+  padding: 11px 18px;
+  cursor: pointer;
+  transition: background 0.18s ease;
+}
+.comment-send:hover { background: #1d3350; }
+
+.comment-list {
+  list-style: none;
+  margin-top: 18px;
+  padding: 0;
+}
+.comment {
+  display: flex;
+  gap: 12px;
+  padding: 22px 0;
+  border-top: 1px solid var(--line-2);
+}
+.comment-body { flex: 1; min-width: 0; }
+.comment-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.comment-name { font-size: var(--fs-text); font-weight: 700; color: var(--nav); }
+.comment-time { font-size: var(--fs-text); color: var(--ink-2); }
+.comment-body p {
+  margin: 0;
+  font-size: var(--fs-text);
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+/* ---------- LIGHTBOX (zoom slike) ---------- */
+.hero img { cursor: zoom-in; }
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(16, 24, 40, 0.9);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.lightbox.open { opacity: 1; pointer-events: auto; }
+.lightbox img {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 14px;
+  box-shadow: 0 20px 60px -20px rgba(0, 0, 0, 0.6);
+  transform: scale(0.96);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.lightbox.open img { transform: scale(1); }
+.lightbox-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.18s ease;
+}
+.lightbox-close:hover { background: rgba(255, 255, 255, 0.26); }
+.lightbox-close svg { width: 22px; height: 22px; }
+
+.footer-space { height: 40px; }
